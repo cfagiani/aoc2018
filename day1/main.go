@@ -1,11 +1,11 @@
 package main
 
 import (
-	"strings"
-	"strconv"
 	"fmt"
-	"github.com/cfagiani/aoc2018/util"
 	"github.com/cfagiani/aoc2018/datastructure"
+	"github.com/cfagiani/aoc2018/util"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -15,7 +15,7 @@ func main() {
 	var done = false
 	var freq = 0
 	allFreq := datastructure.NewSet()
-	for (!done) {
+	for !done {
 		freq, done = part2(lines, freq, allFreq)
 	}
 	fmt.Printf("First dupe is %d\n", freq)
@@ -36,7 +36,7 @@ func part2(lines []string, start int, allFreq *datastructure.Set) (int, bool) {
 	for _, val := range lines {
 		intVal, _ := strconv.Atoi(val)
 		sum += intVal
-		if ! allFreq.Add(sum) {
+		if !allFreq.Add(sum) {
 			return sum, true
 		}
 	}

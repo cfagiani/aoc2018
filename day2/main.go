@@ -1,27 +1,26 @@
 package main
 
 import (
-	"strings"
 	"fmt"
 	"github.com/cfagiani/aoc2018/util"
+	"strings"
 )
 
 func main() {
 	inputString := util.ReadFileAsString("input/day2.input")
 	lines := strings.Split(inputString, "\n")
 	part1(lines)
-	match1, match2 := part2(lines)
-	fmt.Printf("Matches:\n%s\n%s", match1, match2)
+	fmt.Printf("Match %s\n", getMatchingStrings(part2(lines)))
 }
 
-func part2(lines [] string) (string, string) {
+func part2(lines []string) (string, string) {
 
 	for i := 1; i < len(lines)-1; i++ {
 		for j := i + 1; j < len(lines); j++ {
 			diffCount := 0
 			for k := 0; k < len(lines[i]); k++ {
 				if lines[i][k] != lines[j][k] {
-					diffCount ++
+					diffCount++
 				}
 			}
 			if diffCount == 1 {
@@ -66,4 +65,15 @@ func computeHistogram(line string) map[uint8]int {
 		}
 	}
 	return histo
+}
+
+func getMatchingStrings(a string, b string) string {
+	outString := ""
+	for pos, char := range a {
+		if a[pos] == b[pos] {
+			outString = fmt.Sprintf("%s%c", outString, char)
+		}
+	}
+
+	return outString
 }
