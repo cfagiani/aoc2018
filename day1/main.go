@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"fmt"
 	"github.com/cfagiani/aoc2018/util"
+	"github.com/cfagiani/aoc2018/datastructure"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 	part1(lines)
 	var done = false
 	var freq = 0
-	allFreq := NewIntSet()
+	allFreq := datastructure.NewSet()
 	for (!done) {
 		freq, done = part2(lines, freq, allFreq)
 	}
@@ -30,7 +31,7 @@ func part1(lines []string) {
 	fmt.Printf("Final frequency is %d\n", sum)
 }
 
-func part2(lines []string, start int, allFreq *IntSet) (int, bool) {
+func part2(lines []string, start int, allFreq *datastructure.Set) (int, bool) {
 	sum := start
 	for _, val := range lines {
 		intVal, _ := strconv.Atoi(val)
@@ -40,31 +41,4 @@ func part2(lines []string, start int, allFreq *IntSet) (int, bool) {
 		}
 	}
 	return sum, false
-}
-
-type IntSet struct {
-	set map[int]bool
-}
-
-func NewIntSet() *IntSet {
-	return &IntSet{make(map[int]bool)}
-}
-
-func (set *IntSet) Add(i int) bool {
-	_, found := set.set[i]
-	set.set[i] = true
-	return !found //False if it existed already
-}
-
-func (set *IntSet) Contains(i int) bool {
-	_, found := set.set[i]
-	return found //true if it existed already
-}
-
-func (set *IntSet) Remove(i int) {
-	delete(set.set, i)
-}
-
-func (set *IntSet) Size() int {
-	return len(set.set)
 }
