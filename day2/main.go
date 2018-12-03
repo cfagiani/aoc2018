@@ -13,6 +13,7 @@ func main() {
 	fmt.Printf("Match %s\n", getMatchingStrings(part2(lines)))
 }
 
+//Returns 2 strings that differ by only a single character
 func part2(lines []string) (string, string) {
 
 	for i := 1; i < len(lines)-1; i++ {
@@ -32,6 +33,8 @@ func part2(lines []string) (string, string) {
 	return "", ""
 }
 
+//computes a "checksum" by counting the number of strings that have 3 occurrences of the same character by the number that
+//have 2 occurrences of a character
 func part1(lines []string) {
 	hasTwo := 0
 	hasThree := 0
@@ -54,6 +57,7 @@ func part1(lines []string) {
 	fmt.Printf("Checksum  is %d\n", hasTwo*hasThree)
 }
 
+//computes a histogram of letter frequencies in a string
 func computeHistogram(line string) map[uint8]int {
 	histo := make(map[uint8]int)
 	for i := 0; i < len(line); i++ {
@@ -67,6 +71,7 @@ func computeHistogram(line string) map[uint8]int {
 	return histo
 }
 
+//returns the matching characters between 2 strings
 func getMatchingStrings(a string, b string) string {
 	outString := ""
 	for pos, char := range a {

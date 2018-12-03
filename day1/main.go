@@ -21,6 +21,7 @@ func main() {
 	fmt.Printf("First dupe is %d\n", freq)
 }
 
+//Outputs the final frequency after applying all transforms
 func part1(lines []string) {
 	sum := 0
 	for _, val := range lines {
@@ -31,6 +32,7 @@ func part1(lines []string) {
 	fmt.Printf("Final frequency is %d\n", sum)
 }
 
+//finds the first frequency reached twice
 func part2(lines []string, start int, allFreq *datastructure.Set) (int, bool) {
 	sum := start
 	for _, val := range lines {

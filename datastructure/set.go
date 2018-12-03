@@ -12,8 +12,8 @@ func NewSet() *Set {
 
 func NewSetWith(items ...interface{}) *Set {
 	s := NewSet()
-	for v := range items {
-		s.Add(v)
+	for i := 0; i < len(items); i++ {
+		s.Add(items[i])
 	}
 	return s
 }
