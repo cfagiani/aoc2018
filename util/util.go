@@ -26,3 +26,4 @@ func ReadFileAsString(fname string) string {
 	CheckError(err, "Could not read file", true)
 	return string(dat)
 }
+
