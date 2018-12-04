@@ -98,18 +98,10 @@ func populateGuardShifts(lines []string) map[int]Guard {
 		day, hour, minute := getDayTimeFromLine(lines[i])
 		if strings.Contains(lines[i], "begins shift") {
 			if curGuard.id != -1 {
-				arr := curGuard.shifts[curDay]
-				for j := prevTime; j < 60; j++ {
-					arr[j] = isSleeping
-				}
-				curGuard.shifts[curDay] = arr
+				curGuard.shifts[curDay] = updateSleepTime(curGuard.shifts[curDay], prevTime, 60, isSleeping)
 			}
-			y, m, d := splitDate(day)
-			if hour > 0 {
-				d++
-			}
-			dayKey := fmt.Sprintf("%d-%d-%d", y, m, d)
-			curDay = dayKey
+
+			curDay = getDayKey(day, hour)
 			isSleeping = 0
 			prevTime = minute
 			guardId := getGuardId(lines[i])
@@ -120,28 +112,43 @@ func populateGuardShifts(lines []string) map[int]Guard {
 				curGuard = Guard{id: guardId, shifts: make(map[string][60]int)}
 				guards[guardId] = curGuard
 			}
-			curGuard.shifts[dayKey] = [60]int{}
+			curGuard.shifts[curDay] = [60]int{}
 		} else {
-			arr := curGuard.shifts[curDay]
-			for j := prevTime; j < minute; j++ {
-				arr[j] = isSleeping
-			}
-			curGuard.shifts[curDay] = arr
-			if strings.Contains(lines[i], "falls asleep") {
-				isSleeping = 1
-			} else if strings.Contains(lines[i], "wakes up") {
-				isSleeping = 0
-			}
+			curGuard.shifts[curDay] = updateSleepTime(curGuard.shifts[curDay], prevTime, minute, isSleeping)
+			isSleeping = getSleepState(lines[i])
 			prevTime = minute
 		}
 	}
 	//handle last one
-	arr := curGuard.shifts[curDay]
-	for j := prevTime; j < 60; j++ {
-		arr[j] = isSleeping
-	}
-	curGuard.shifts[curDay] = arr
+	curGuard.shifts[curDay] = updateSleepTime(curGuard.shifts[curDay], prevTime, 60, isSleeping)
 	return guards
+}
+
+//updates the sleep times array with the state value passed in between the minutes indicated with start/end
+func updateSleepTime(times [60]int, start int, end int, state int) [60]int {
+	for j := start; j < end; j++ {
+		times[j] = state
+	}
+	return times
+}
+
+//returns 1 if the line indicates the guard fell asleep, 0 if not (or -1 if unrecognized input)
+func getSleepState(line string) int {
+	if strings.Contains(line, "falls asleep") {
+		return 1
+	} else if strings.Contains(line, "wakes up") {
+		return 0
+	}
+	return -1
+}
+
+//converts a day + hour into the day key (if the hour is > 0 then it advances the day by 1 when building the key)
+func getDayKey(day string, hour int) string {
+	y, m, d := splitDate(day)
+	if hour > 0 {
+		d++
+	}
+	return fmt.Sprintf("%d-%d-%d", y, m, d)
 }
 
 func getGuardId(line string) int {
