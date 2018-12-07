@@ -20,6 +20,17 @@ func CheckError(err error, msg string, isFatal bool) bool {
 	return false
 }
 
+//returns the difference between arr1 and arr2
+func FilterArray(arr1 []string, arr2 []string) []string {
+	var result []string
+	for _, v := range arr1 {
+		if ! IsStringInSlice(v, arr2) {
+			result = append(result, v)
+		}
+	}
+	return result
+}
+
 // Returns the full contents of a file as a string. If the file cannot be read, it will log a Fatal error and exit the program.
 func ReadFileAsString(fname string) string {
 	dat, err := ioutil.ReadFile(fname)
@@ -29,6 +40,15 @@ func ReadFileAsString(fname string) string {
 
 //returns true if a is in the list passed in
 func IsIntInSlice(a int, list []int) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
+func IsStringInSlice(a string, list []string) bool {
 	for _, b := range list {
 		if b == a {
 			return true
