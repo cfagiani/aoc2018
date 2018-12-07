@@ -1,11 +1,11 @@
 package main
 
 import (
-	"strings"
+	"fmt"
 	"github.com/cfagiani/aoc2018/util"
 	"sort"
-	"fmt"
 	"strconv"
+	"strings"
 )
 
 type Guard struct {

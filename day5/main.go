@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/cfagiani/aoc2018/util"
 	"math"
-	"fmt"
 	"strings"
 )
 

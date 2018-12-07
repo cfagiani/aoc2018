@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/cfagiani/aoc2018/util"
-	"strings"
 	"fmt"
+	"github.com/cfagiani/aoc2018/util"
 	"strconv"
+	"strings"
 )
 
 func main() {
@@ -64,7 +64,7 @@ func buildOverlapCount(lines []string) [][]int {
 		_, startX, startY, w, h := tokenizeLine(lines[i])
 		for x := startX; x < startX+w; x++ {
 			for y := startY; y < startY+h; y++ {
-				overlap[x][y] ++
+				overlap[x][y]++
 			}
 		}
 	}

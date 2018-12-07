@@ -1,12 +1,12 @@
 package main
 
 import (
-	"strings"
-	"github.com/cfagiani/aoc2018/util"
-	"github.com/cfagiani/aoc2018/datastructure"
-	"strconv"
 	"fmt"
+	"github.com/cfagiani/aoc2018/datastructure"
+	"github.com/cfagiani/aoc2018/util"
 	"math"
+	"strconv"
+	"strings"
 )
 
 type Point struct {
@@ -24,13 +24,13 @@ func main() {
 
 func part2(points []Point) {
 	count := 0
-	for i:= 0; i < 1000; i++{
-		for j:=0; j< 1000; j++{
+	for i := 0; i < 1000; i++ {
+		for j := 0; j < 1000; j++ {
 			sum := 0
-			for _, v := range points{
-				sum += manhattanDist(i,j,v.x, v.y)
+			for _, v := range points {
+				sum += manhattanDist(i, j, v.x, v.y)
 			}
-			if sum < 10000{
+			if sum < 10000 {
 				count++
 			}
 		}
@@ -46,7 +46,7 @@ func part1(points []Point) {
 		for j := minY; j < maxY; j++ {
 			closestIdx := findIndexOfClosestPoint(points, i, j)
 			if closestIdx >= 0 {
-				if ! util.IsIntInSlice(closestIdx, boundsIndexes) {
+				if !util.IsIntInSlice(closestIdx, boundsIndexes) {
 					area[closestIdx]++
 				}
 			}
@@ -59,7 +59,7 @@ func part1(points []Point) {
 		for j := minY; j < maxY*2; j++ {
 			closestIdx := findIndexOfClosestPoint(points, i, j)
 			if closestIdx >= 0 {
-				if ! util.IsIntInSlice(closestIdx, boundsIndexes) {
+				if !util.IsIntInSlice(closestIdx, boundsIndexes) {
 					area2[closestIdx]++
 				}
 			}
