@@ -27,3 +27,12 @@ func ReadFileAsString(fname string) string {
 	return string(dat)
 }
 
+//returns true if a is in the list passed in
+func IsIntInSlice(a int, list []int) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
