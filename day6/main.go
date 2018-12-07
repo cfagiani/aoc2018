@@ -40,32 +40,13 @@ func part2(points []Point) {
 
 func part1(points []Point) {
 	minX, minY, maxX, maxY := findBounds(points)
-	area := make([]int, len(points))
+
 	boundsIndexes := getIndexesOfBounds(points, minX, minY, maxX, maxY)
-	for i := minX; i < maxX; i++ {
-		for j := minY; j < maxY; j++ {
-			closestIdx := findIndexOfClosestPoint(points, i, j)
-			if closestIdx >= 0 {
-				if !util.IsIntInSlice(closestIdx, boundsIndexes) {
-					area[closestIdx]++
-				}
-			}
-		}
-	}
-
+	area := computeIndexWithinBounds(points, minX, minY, maxX, maxY, boundsIndexes)
 	//this is a hacky way to remove the "infinite" regions. Should really do something better
-	area2 := make([]int, len(points))
-	for i := minX; i < maxX*2; i++ {
-		for j := minY; j < maxY*2; j++ {
-			closestIdx := findIndexOfClosestPoint(points, i, j)
-			if closestIdx >= 0 {
-				if !util.IsIntInSlice(closestIdx, boundsIndexes) {
-					area2[closestIdx]++
-				}
-			}
-		}
-	}
+	area2 := computeIndexWithinBounds(points, minX, minY, maxX*2, maxY*2, boundsIndexes)
 
+	//remove anything that changed when we increased the bounds
 	for i := 0; i < len(area); i++ {
 		if area[i] != area2[i] {
 			area[i] = 0
@@ -79,6 +60,21 @@ func part1(points []Point) {
 		}
 	}
 	fmt.Printf("Max area is %d\n", maxArea)
+}
+
+func computeIndexWithinBounds(points []Point, minX int, minY int, maxX int, maxY int, boundsIndexes []int) []int {
+	area := make([]int, len(points))
+	for i := minX; i < maxX; i++ {
+		for j := minY; j < maxY; j++ {
+			closestIdx := findIndexOfClosestPoint(points, i, j)
+			if closestIdx >= 0 {
+				if !util.IsIntInSlice(closestIdx, boundsIndexes) {
+					area[closestIdx]++
+				}
+			}
+		}
+	}
+	return area
 }
 
 func findIndexOfClosestPoint(points []Point, x int, y int) int {
