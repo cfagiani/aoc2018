@@ -28,41 +28,58 @@ func main() {
 func part1(state *State, rules []Rule) {
 	for i := 0; i < 20; i++ {
 		state = applyGeneration(state, rules)
-		fmt.Printf("%s\n", state.toString(false))
+		fmt.Printf("%s\n", state.toString(true))
 	}
 	sum := state.getSumOfIndexes()
-
 	fmt.Printf("Sum of all plants: %d\n", sum)
 }
 
 func applyGeneration(state *State, rules []Rule) *State {
-	var pots []bool
+	var nextPots []bool
+	//starts nextPots off with 2 false entries since we won't look at those in the loop
 	for i := 0; i < NeighborCount; i++ {
-		pots = append(pots, false)
+		nextPots = append(nextPots, false)
 	}
-	var nextState State
-	nextState.zeroIndex = state.zeroIndex + NeighborCount
+
+	//current state's pots also needs to be padded on both ends so we don't get an outOfBounds error
 	curPots := append([]bool{false, false}, state.pots...)
 	curPots = append(curPots, []bool{false, false}...)
 
-	for i := 2; i < len(curPots)-NeighborCount; i++ {
+	for i := NeighborCount; i < len(curPots)-NeighborCount; i++ {
 		targetPattern := getTargetPattern(curPots, i)
 		matched := false
 		for j := 0; j < len(rules); j++ {
 			if rules[j].matches(targetPattern) {
-				pots = append(pots, rules[j].result)
+				nextPots = append(nextPots, rules[j].result)
 				matched = true
 				break
 			}
 		}
 		if !matched {
-			pots = append(pots, false)
+			nextPots = append(nextPots, false)
 		}
 	}
 	for i := 0; i < NeighborCount; i++ {
-		pots = append(pots, false)
+		nextPots = append(nextPots, false)
 	}
-	nextState.pots = pots
+	//now we can trim any negative positions up to the first plant - the 2 positions we added
+	trimSize := 0
+	for trimSize = 0; trimSize < state.zeroIndex-NeighborCount; trimSize++ {
+		if nextPots[trimSize] {
+			break
+		}
+	}
+	nextPots = nextPots[trimSize:]
+	//can also trim off the other end
+	lastIdx := 0
+	for lastIdx = len(nextPots) - 1; lastIdx > 0; lastIdx-- {
+		if nextPots[lastIdx] {
+			break
+		}
+	}
+	nextPots = nextPots[:lastIdx+NeighborCount]
+	//since we pre-pended NeighborCount entries, advance the zero index by that much
+	nextState := State{zeroIndex: state.zeroIndex + NeighborCount - trimSize, pots: nextPots}
 	return &nextState
 }
 
@@ -106,9 +123,8 @@ func (rule Rule) matches(pattern []bool) bool {
 
 func getTargetPattern(state []bool, startIdx int) []bool {
 	var pattern []bool
-	for i := startIdx - NeighborCount; i < startIdx+NeighborCount+1; i++ {
+	for i := startIdx - NeighborCount; i <= startIdx+NeighborCount; i++ {
 		pattern = append(pattern, state[i])
-
 	}
 
 	return pattern
