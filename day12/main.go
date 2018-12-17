@@ -17,33 +17,60 @@ type State struct {
 }
 
 const NeighborCount = 2
+const PatternSize = 5
 
 func main() {
 	inputString := util.ReadFileAsString("input/day12.input")
 	initState, rules := initialize(inputString)
 	fmt.Printf("%s\n", initState.toString(false))
-	part1(&initState, rules) //2054 too high
+	part1(&initState, rules)
+	part2(&initState, rules)
 }
 
 func part1(state *State, rules []Rule) {
 	for i := 0; i < 20; i++ {
 		state = applyGeneration(state, rules)
-		fmt.Printf("%s\n", state.toString(true))
+		fmt.Printf("%s\n", state.toString(false))
 	}
 	sum := state.getSumOfIndexes()
 	fmt.Printf("Sum of all plants: %d\n", sum)
 }
 
+func part2(state *State, rules []Rule) {
+	lastSum := 0
+	lastDiff := 0
+	lastDiffCount := 0
+	targetGenerations := 50000000000
+	curGen := 0
+	for curGen = 0; curGen < 50000000000; curGen++ {
+		state = applyGeneration(state, rules)
+		sum := state.getSumOfIndexes()
+		diff := sum - lastSum
+		lastSum = sum
+		if diff == lastDiff {
+			lastDiffCount++
+		} else {
+			lastDiff = diff
+			lastDiffCount = 0
+		}
+		if lastDiffCount >= 3 {
+			break
+		}
+	}
+	finalSum := lastSum + (targetGenerations-curGen-1)*lastDiff
+	fmt.Printf("\nAfter %d generations, the sum is %d\n", targetGenerations, finalSum)
+}
+
 func applyGeneration(state *State, rules []Rule) *State {
 	var nextPots []bool
-	//starts nextPots off with 2 false entries since we won't look at those in the loop
+	//starts nextPots off with PatternSize false entries since we won't look at those in the loop
 	for i := 0; i < NeighborCount; i++ {
 		nextPots = append(nextPots, false)
 	}
 
 	//current state's pots also needs to be padded on both ends so we don't get an outOfBounds error
-	curPots := append([]bool{false, false}, state.pots...)
-	curPots = append(curPots, []bool{false, false}...)
+	curPots := append([]bool{false, false, false, false, false}, state.pots...)
+	curPots = append(curPots, []bool{false, false, false, false, false}...)
 
 	for i := NeighborCount; i < len(curPots)-NeighborCount; i++ {
 		targetPattern := getTargetPattern(curPots, i)
@@ -62,7 +89,7 @@ func applyGeneration(state *State, rules []Rule) *State {
 	for i := 0; i < NeighborCount; i++ {
 		nextPots = append(nextPots, false)
 	}
-	//now we can trim any negative positions up to the first plant - the 2 positions we added
+	//now we can trim any negative positions up to the first plant
 	trimSize := 0
 	for trimSize = 0; trimSize < state.zeroIndex-NeighborCount; trimSize++ {
 		if nextPots[trimSize] {
@@ -79,7 +106,7 @@ func applyGeneration(state *State, rules []Rule) *State {
 	}
 	nextPots = nextPots[:lastIdx+NeighborCount]
 	//since we pre-pended NeighborCount entries, advance the zero index by that much
-	nextState := State{zeroIndex: state.zeroIndex + NeighborCount - trimSize, pots: nextPots}
+	nextState := State{zeroIndex: state.zeroIndex + PatternSize - trimSize, pots: nextPots}
 	return &nextState
 }
 
