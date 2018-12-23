@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/cfagiani/aoc2018/util"
-	"strings"
-	"strconv"
 	"fmt"
 	"github.com/cfagiani/aoc2018/datastructure"
+	"github.com/cfagiani/aoc2018/util"
+	"strconv"
+	"strings"
 )
 
 type Operation []int
@@ -113,7 +113,7 @@ func processInput(lines []string) ([]State, []Operation) {
 func buildState(lines []string) State {
 	return State{before: stringToIntArray(lines[0]),
 		operation: stringToIntArray(lines[1]),
-		after: stringToIntArray(lines[2])}
+		after:     stringToIntArray(lines[2])}
 }
 
 func stringToIntArray(input string) []int {

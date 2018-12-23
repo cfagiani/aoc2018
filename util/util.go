@@ -24,7 +24,7 @@ func CheckError(err error, msg string, isFatal bool) bool {
 func FilterArray(arr1 []string, arr2 []string) []string {
 	var result []string
 	for _, v := range arr1 {
-		if ! IsStringInSlice(v, arr2) {
+		if !IsStringInSlice(v, arr2) {
 			result = append(result, v)
 		}
 	}

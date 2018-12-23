@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/cfagiani/aoc2018/util"
-	"strings"
-	"strconv"
 	"fmt"
+	"github.com/cfagiani/aoc2018/util"
+	"strconv"
+	"strings"
 )
 
 type TreeNode struct {

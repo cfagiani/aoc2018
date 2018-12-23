@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/cfagiani/aoc2018/util"
 	"strconv"
-	"fmt"
 )
 
 func main() {

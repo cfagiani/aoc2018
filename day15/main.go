@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/cfagiani/aoc2018/util"
-	"strings"
-	"sort"
-	"github.com/cfagiani/aoc2018/datastructure"
-	"math"
 	"fmt"
+	"github.com/cfagiani/aoc2018/datastructure"
+	"github.com/cfagiani/aoc2018/util"
+	"math"
+	"sort"
+	"strings"
 )
 
 const StartingPower = 3
@@ -40,7 +40,7 @@ func main() {
 	part2(inputString)
 }
 
-func initialize(input string) ([][] byte, []*Unit) {
+func initialize(input string) ([][]byte, []*Unit) {
 	lines := strings.Split(input, "\n")
 	state := make([][]byte, len(lines))
 	var units []*Unit
@@ -65,7 +65,7 @@ func part1(state [][]byte, units []*Unit) {
 	var endedEarly bool
 	for done := false; !done; {
 		state, endedEarly = performRound(state, units)
-		if ! endedEarly {
+		if !endedEarly {
 			rounds++
 		}
 		done = len(findEnemies('G', units)) == 0 || len(findEnemies('E', units)) == 0
@@ -81,17 +81,17 @@ func part2(inputString string) {
 		state, units := initialize(inputString)
 		//adjust power for all elves
 		elves := findEnemies('G', units)
-		for i:=0; i < len(elves); i++{
+		for i := 0; i < len(elves); i++ {
 			elves[i].Power = power
 		}
 		//get initial count of elves
 		elfCount := len(findEnemies('G', units))
 		var endedEarly bool
-		rounds :=0
+		rounds := 0
 		for done := false; !done; {
 			state, endedEarly = performRound(state, units)
 			done = len(findEnemies('G', units)) < elfCount || len(findEnemies('E', units)) == 0
-			if ! endedEarly {
+			if !endedEarly {
 				rounds++
 			}
 		}

@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/cfagiani/aoc2018/util"
 	"strings"
-	"fmt"
 )
 
 type Rule struct {

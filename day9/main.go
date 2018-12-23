@@ -1,11 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"github.com/cfagiani/aoc2018/util"
+	"math"
 	"strconv"
 	"strings"
-	"fmt"
-	"math"
 )
 
 type Marble struct {

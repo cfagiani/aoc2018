@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/cfagiani/aoc2018/util"
-	"github.com/cfagiani/aoc2018/datastructure"
-	"strings"
-	"strconv"
 	"fmt"
+	"github.com/cfagiani/aoc2018/datastructure"
+	"github.com/cfagiani/aoc2018/util"
 	"math"
+	"strconv"
+	"strings"
 )
 
 type Star struct {
@@ -116,8 +116,8 @@ func buildStars(input string) []Star {
 }
 
 func buildStar(input string) Star {
-	positionStr := input[len(PositionLabel): strings.Index(input, VelocityLabel)-2]
-	velStr := input[strings.Index(input, VelocityLabel)+len(VelocityLabel):len(input)-1]
+	positionStr := input[len(PositionLabel) : strings.Index(input, VelocityLabel)-2]
+	velStr := input[strings.Index(input, VelocityLabel)+len(VelocityLabel) : len(input)-1]
 
 	return Star{pos: buildPair(positionStr), velocity: buildPair(velStr)}
 }

@@ -33,7 +33,7 @@ func (pq *PriorityQueue) Pop() interface{} {
 	old := *pq
 	n := len(old)
 	item := old[n-1]
-	*pq = old[0: n-1]
+	*pq = old[0 : n-1]
 	return item
 }
 
@@ -45,7 +45,7 @@ func (pq *PriorityQueue) Enqueue(val interface{}) {
 	heap.Push(pq, item)
 }
 
-func (pq *PriorityQueue) Dequeue() interface{}{
+func (pq *PriorityQueue) Dequeue() interface{} {
 	item := heap.Pop(pq).(*Item)
 	return item.Value
 }

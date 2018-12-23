@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/cfagiani/aoc2018/util"
-	"strings"
-	"sort"
 	"fmt"
+	"github.com/cfagiani/aoc2018/util"
+	"sort"
+	"strings"
 )
 
 type Cart struct {
