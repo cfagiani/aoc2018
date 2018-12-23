@@ -41,7 +41,7 @@ func (set *Set) Size() int {
 	return len(set.set)
 }
 
-func (set *Set) Union(other *Set) Set {
+func (set *Set) Union(other *Set) *Set {
 	newSet := NewSet()
 	for item, _ := range set.set {
 		newSet.Add(item)
@@ -49,7 +49,7 @@ func (set *Set) Union(other *Set) Set {
 	for item, _ := range other.set {
 		newSet.Add(item)
 	}
-	return *newSet
+	return newSet
 }
 
 func (set *Set) Intersect(other *Set) Set {
