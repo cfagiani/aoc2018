@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/cfagiani/aoc2018/datastructure"
 	"github.com/cfagiani/aoc2018/util"
 	"strconv"
 	"strings"
@@ -18,15 +17,32 @@ type State struct {
 
 type Op func(int, int, int, []int)
 
+var opcodeFuncs = map[string]Op{
+	"addr": addr,
+	"addi": addi,
+	"mulr": mulr,
+	"muli": muli,
+	"banr": banr,
+	"bani": bani,
+	"borr": borr,
+	"bori": bori,
+	"setr": setr,
+	"seti": seti,
+	"gtir": gtir,
+	"gtri": gtri,
+	"gtrr": gtrr,
+	"eqir": eqir,
+	"eqri": eqri,
+	"eqrr": eqrr}
+
 func main() {
 	inputString := util.ReadFileAsString("input/day16.input")
 	states, program := processInput(strings.Split(inputString, "\n"))
 	funcMappings := part1(states)
-
-	part2(program, mapOpCodes(states, funcMappings))
+	part2(program, mapOpCodes(states, funcMappings)) //184799965796330 too high
 }
 
-func part1(states []State) [][]Op {
+func part1(states []State) [][]string {
 	funcMapping := findMatchingFuncs(states)
 	count := 0
 	for i := 0; i < len(funcMapping); i++ {
@@ -38,56 +54,52 @@ func part1(states []State) [][]Op {
 	return funcMapping
 }
 
-func part2(program []Operation, opCodeMapping map[int]Op) {
+func part2(program []Operation, opCodeMapping map[int]string) {
 	registers := []int{0, 0, 0, 0}
 	for i := 0; i < len(program); i++ {
-		opCodeMapping[program[i][0]](program[i][1], program[i][2], program[i][3], registers)
+		opcodeFuncs[opCodeMapping[program[i][0]]](program[i][1], program[i][2], program[i][3], registers)
 	}
 	fmt.Printf("After running program, the value in register 0 is: %d", registers[0])
 }
 
-func mapOpCodes(states []State, stateMappings [][]Op) map[int]Op {
-	codeMappings := make(map[int]*datastructure.Set)
-
-	for i := 0; i < len(stateMappings); i++ {
-
-		curSet := datastructure.NewSet()
-		for j := 0; j < len(stateMappings[i]); j++ {
-			curSet.Add(stateMappings[i][j])
-		}
-		if mappingSet, ok := codeMappings[states[i].operation[0]]; ok {
-			codeMappings[states[i].operation[0]] = curSet.Union(mappingSet)
-		} else {
-			codeMappings[states[i].operation[0]] = curSet
+func mapOpCodes(states []State, stateMappings [][]string) map[int]string {
+	mappings := make(map[int]string)
+	for len(mappings) < len(opcodeFuncs) {
+		for i := 0; i < len(stateMappings); i++ {
+			if len(stateMappings[i]) == 1 {
+				funcName := stateMappings[i][0]
+				mappings[states[i].operation[0]] = funcName
+				//now remove all other instances where that name shows up
+				for j := 0; j < len(stateMappings); j++ {
+					for k, other := range stateMappings[j] {
+						if other == funcName {
+							stateMappings[j] = append(stateMappings[j][:k], stateMappings[j][k+1:]...)
+						}
+					}
+				}
+			}
 		}
 	}
-	finalMappings := make(map[int]Op)
-	for k := range codeMappings {
-		for item := range codeMappings[k].Iter() {
-			finalMappings[k] = item.(Op)
-		}
-
-	}
-	return finalMappings
+	return mappings
 }
 
-func findMatchingFuncs(states []State) [][]Op {
-	opcodeFuncs := []Op{addr, addi, mulr, muli, banr, bani, borr, bori, setr, seti, gtir, gtri, gtrr, eqir, eqri, eqrr}
-	matches := make([][]Op, len(states))
+func findMatchingFuncs(states []State) [][]string {
+
+	matches := make([][]string, len(states))
 	for i := 0; i < len(states); i++ {
-		matches[i] = testState(states[i], opcodeFuncs)
+		matches[i] = testState(states[i])
 	}
 	return matches
 }
 
-func testState(state State, ops []Op) []Op {
-	var matches []Op
-	for i := 0; i < len(ops); i++ {
+func testState(state State) []string {
+	var matches []string
+	for name, function := range opcodeFuncs {
 		registers := make([]int, 4)
 		copy(registers, state.before)
-		ops[i](state.operation[1], state.operation[2], state.operation[3], registers)
+		function(state.operation[1], state.operation[2], state.operation[3], registers)
 		if util.IntArrayEquals(registers, state.after) {
-			matches = append(matches, ops[i])
+			matches = append(matches, name)
 		}
 	}
 	return matches
