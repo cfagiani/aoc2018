@@ -35,7 +35,7 @@ func main() {
 	inputString := util.ReadFileAsString("input/day15.input")
 	state, units := initialize(inputString)
 	fmt.Printf("Initial State\n")
-	printState(state)
+	util.PrintByteArray(state)
 	part1(state, units)
 	part2(inputString)
 }
@@ -70,7 +70,7 @@ func part1(state [][]byte, units []*Unit) {
 		}
 		done = len(findEnemies('G', units)) == 0 || len(findEnemies('E', units)) == 0
 		fmt.Printf("After %d, sum is: %d\n", rounds, getSumOfPoints(units))
-		printState(state)
+		util.PrintByteArray(state)
 	}
 
 	fmt.Printf("Results of %d rounds of combat: %d\n", rounds, getSumOfPoints(units)*rounds)
@@ -204,16 +204,7 @@ func move(unit *Unit, dest datastructure.IntPair, state [][]byte) [][]byte {
 	return state
 }
 
-func printState(state [][]byte) {
-	fmt.Printf("\n")
-	for i := 0; i < len(state); i++ {
-		for j := 0; j < len(state[i]); j++ {
-			fmt.Printf("%s", string(state[i][j]))
-		}
-		fmt.Printf("\n")
-	}
-	fmt.Printf("\n")
-}
+
 
 func findEnemies(unitType byte, units []*Unit) []*Unit {
 	var enemies []*Unit

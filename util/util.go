@@ -4,6 +4,7 @@ package util
 import (
 	"io/ioutil"
 	"log"
+	"fmt"
 )
 
 //Checks the error argument and, if it is not nil, it will log the msg passed in. If isFatal is true, the log will be
@@ -67,4 +68,15 @@ func IntArrayEquals(a []int, b []int) bool {
 		}
 	}
 	return true
+}
+
+func PrintByteArray(state [][]byte) {
+	fmt.Printf("\n")
+	for i := 0; i < len(state); i++ {
+		for j := 0; j < len(state[i]); j++ {
+			fmt.Printf("%s", string(state[i][j]))
+		}
+		fmt.Printf("\n")
+	}
+	fmt.Printf("\n")
 }
