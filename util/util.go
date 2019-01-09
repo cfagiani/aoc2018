@@ -2,9 +2,9 @@
 package util
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
-	"fmt"
 )
 
 //Checks the error argument and, if it is not nil, it will log the msg passed in. If isFatal is true, the log will be

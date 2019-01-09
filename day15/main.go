@@ -204,8 +204,6 @@ func move(unit *Unit, dest datastructure.IntPair, state [][]byte) [][]byte {
 	return state
 }
 
-
-
 func findEnemies(unitType byte, units []*Unit) []*Unit {
 	var enemies []*Unit
 	for i := 0; i < len(units); i++ {

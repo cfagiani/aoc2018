@@ -39,7 +39,7 @@ func main() {
 	inputString := util.ReadFileAsString("input/day16.input")
 	states, program := processInput(strings.Split(inputString, "\n"))
 	funcMappings := part1(states)
-	part2(program, mapOpCodes(states, funcMappings)) //184799965796330 too high
+	part2(program, mapOpCodes(states, funcMappings))
 }
 
 func part1(states []State) [][]string {
