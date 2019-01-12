@@ -1,10 +1,10 @@
 package main
 
 import (
-	"strings"
+	"fmt"
 	"github.com/cfagiani/aoc2018/util"
 	"strconv"
-	"fmt"
+	"strings"
 )
 
 type Op func(int, int, int, []int)
